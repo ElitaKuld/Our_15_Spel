@@ -138,13 +138,22 @@ public class Our_15_Spel extends JFrame {
     ActionListener listener = new ActionListener() { // anonym klass
         @Override
         public void actionPerformed(ActionEvent e) {
-            // blanda brickorna(panelerna) i slumpmässig ordning
+            // blanda brickorna (panelerna) i slumpmässig ordning
             if (e.getSource() == startButton) {
                 Collections.shuffle(listOfPanels);
                 gamePanel.removeAll();
                 for (JPanel panel : listOfPanels) gamePanel.add(panel);
                 gamePanel.revalidate();
             }
+
+            // kontrollera om spelaren vann
+            if (gamePanel.getComponent(0) == panel1 && gamePanel.getComponent(1) == panel2 && gamePanel.getComponent(2) == panel3 &&
+                    gamePanel.getComponent(3) == panel4 && gamePanel.getComponent(4) == panel5 && gamePanel.getComponent(5) == panel6 &&
+                    gamePanel.getComponent(6) == panel7 && gamePanel.getComponent(7) == panel8 && gamePanel.getComponent(8) == panel9 &&
+                    gamePanel.getComponent(9) == panel10 && gamePanel.getComponent(10) == panel11 && gamePanel.getComponent(11) == panel12 &&
+                    gamePanel.getComponent(12) == panel13 && gamePanel.getComponent(13) == panel14 && gamePanel.getComponent(14) == panel15 &&
+                    gamePanel.getComponent(15) == panel16)
+                JOptionPane.showMessageDialog(null, "Grattis, du vann!");
         }
     };
 
