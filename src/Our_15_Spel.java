@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +10,24 @@ public class Our_15_Spel extends JFrame {
 
     JPanel basePanel = new JPanel();
     JPanel gamePanel = new JPanel();
+
+    // skapa 16 paneler
+    JPanel panel1 = new JPanel();
+    JPanel panel2 = new JPanel();
+    JPanel panel3 = new JPanel();
+    JPanel panel4 = new JPanel();
+    JPanel panel5 = new JPanel();
+    JPanel panel6 = new JPanel();
+    JPanel panel7 = new JPanel();
+    JPanel panel8 = new JPanel();
+    JPanel panel9 = new JPanel();
+    JPanel panel10 = new JPanel();
+    JPanel panel11 = new JPanel();
+    JPanel panel12 = new JPanel();
+    JPanel panel13 = new JPanel();
+    JPanel panel14 = new JPanel();
+    JPanel panel15 = new JPanel();
+    JPanel panel16 = new JPanel();
 
     // skapa 15 knappar
     JButton button1 = new JButton("1");
@@ -28,7 +47,7 @@ public class Our_15_Spel extends JFrame {
     JButton button15 = new JButton("15");
 
     JButton startButton = new JButton("Start");
-    List<JButton> listOfButtons = new LinkedList<>();
+    List<JPanel> listOfPanels = new LinkedList<>();
 
     public Our_15_Spel() {
         add(basePanel);
@@ -37,22 +56,40 @@ public class Our_15_Spel extends JFrame {
         basePanel.add(startButton, BorderLayout.EAST);
         gamePanel.setLayout(new GridLayout(4, 4));
 
-        // lägga till 15 knappar på gamePanel
-        gamePanel.add(button1);
-        gamePanel.add(button2);
-        gamePanel.add(button3);
-        gamePanel.add(button4);
-        gamePanel.add(button5);
-        gamePanel.add(button6);
-        gamePanel.add(button7);
-        gamePanel.add(button8);
-        gamePanel.add(button9);
-        gamePanel.add(button10);
-        gamePanel.add(button11);
-        gamePanel.add(button12);
-        gamePanel.add(button13);
-        gamePanel.add(button14);
-        gamePanel.add(button15);
+        // lägga till 16 paneler i gamePanel
+        gamePanel.add(panel1);
+        gamePanel.add(panel2);
+        gamePanel.add(panel3);
+        gamePanel.add(panel4);
+        gamePanel.add(panel5);
+        gamePanel.add(panel6);
+        gamePanel.add(panel7);
+        gamePanel.add(panel8);
+        gamePanel.add(panel9);
+        gamePanel.add(panel10);
+        gamePanel.add(panel11);
+        gamePanel.add(panel12);
+        gamePanel.add(panel13);
+        gamePanel.add(panel14);
+        gamePanel.add(panel15);
+        gamePanel.add(panel16);
+
+        // lägga till 15 knappar
+        panel1.add(button1);
+        panel2.add(button2);
+        panel3.add(button3);
+        panel4.add(button4);
+        panel5.add(button5);
+        panel6.add(button6);
+        panel7.add(button7);
+        panel8.add(button8);
+        panel9.add(button9);
+        panel10.add(button10);
+        panel11.add(button11);
+        panel12.add(button12);
+        panel13.add(button13);
+        panel14.add(button14);
+        panel15.add(button15);
 
         // lägga till en lyssnare
         button1.addActionListener(listener);
@@ -73,23 +110,23 @@ public class Our_15_Spel extends JFrame {
 
         startButton.addActionListener(listener);
 
-        // lägga knappar i en lista
-        listOfButtons.add(button1);
-        listOfButtons.add(button2);
-        listOfButtons.add(button3);
-        listOfButtons.add(button4);
-        listOfButtons.add(button5);
-        listOfButtons.add(button6);
-        listOfButtons.add(button7);
-        listOfButtons.add(button8);
-        listOfButtons.add(button9);
-        listOfButtons.add(button10);
-        listOfButtons.add(button11);
-        listOfButtons.add(button12);
-        listOfButtons.add(button13);
-        listOfButtons.add(button14);
-        listOfButtons.add(button15);
-        listOfButtons.add(null);
+        // lägga paneler i en lista
+        listOfPanels.add(panel1);
+        listOfPanels.add(panel2);
+        listOfPanels.add(panel3);
+        listOfPanels.add(panel4);
+        listOfPanels.add(panel5);
+        listOfPanels.add(panel6);
+        listOfPanels.add(panel7);
+        listOfPanels.add(panel8);
+        listOfPanels.add(panel9);
+        listOfPanels.add(panel10);
+        listOfPanels.add(panel11);
+        listOfPanels.add(panel12);
+        listOfPanels.add(panel13);
+        listOfPanels.add(panel14);
+        listOfPanels.add(panel15);
+        listOfPanels.add(panel16);
 
         pack();
         setLocationRelativeTo(null);
@@ -101,6 +138,13 @@ public class Our_15_Spel extends JFrame {
     ActionListener listener = new ActionListener() { // anonym klass
         @Override
         public void actionPerformed(ActionEvent e) {
+            // blanda brickorna(panelerna) i slumpmässig ordning
+            if (e.getSource() == startButton) {
+                Collections.shuffle(listOfPanels);
+                gamePanel.removeAll();
+                for (JPanel panel : listOfPanels) gamePanel.add(panel);
+                gamePanel.revalidate();
+            }
         }
     };
 
