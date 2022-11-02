@@ -2,8 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 public class Our_15_Spel extends JFrame {
@@ -13,6 +12,7 @@ public class Our_15_Spel extends JFrame {
     JButton startButton = new JButton("Nytt spel");
     List<JButton> listOfButtons = new LinkedList<>();
     List<JButton> listOfButtonsToShuffle;
+
 
     public Our_15_Spel() {
         add(basePanel);
@@ -29,8 +29,7 @@ public class Our_15_Spel extends JFrame {
             button.addActionListener(listener);
             listOfButtons.add(button);
         }
-
-        // skapa den 16:e osynliga knappen (utan lyssnaren)
+        // skapa den 16:e osynliga knappen (och utan lyssnaren)
         JButton lastButton = new JButton();
         lastButton.setVisible(false);
         listOfButtons.add(lastButton);
@@ -47,7 +46,6 @@ public class Our_15_Spel extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    // skapa en lyssnare
     ActionListener listener = new ActionListener() { // anonym klass
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -59,10 +57,60 @@ public class Our_15_Spel extends JFrame {
                 for (JButton button : listOfButtonsToShuffle) gamePanel.add(button);
                 gamePanel.revalidate();
             }
+
+            int index;
+            JButton placeToTheRight = null;
+            JButton placeToTheLeft = null;
+            JButton placeUp = null;
+            JButton placeDown = null;
+
+            // testa om det var en knapp som ligger på spelpanelen som användaren har tryckt på
+            if (((JButton) e.getSource()).getParent() == gamePanel) {
+                index = Arrays.asList(gamePanel.getComponents()).indexOf(((JButton) e.getSource()));
+
+                // tilldela index till möjliga tomma platser
+                if (index < gamePanel.getComponents().length - 1)
+                    placeToTheRight = (JButton) Arrays.asList(gamePanel.getComponents()).get(index + 1);
+                if (index > 0)
+                    placeToTheLeft = (JButton) Arrays.asList(gamePanel.getComponents()).get(index - 1);
+                if (index >= 4)
+                    placeUp = (JButton) Arrays.asList(gamePanel.getComponents()).get(index - 4);
+                if (index <= 11)
+                    placeDown = (JButton) Arrays.asList(gamePanel.getComponents()).get(index + 4);
+
+                // kolla om platsen är tomm och i så fall byta plats på 2 knappar
+                if (placeToTheRight != null && !placeToTheRight.isVisible()) {
+                    swapThePlaces(placeToTheRight, e, gamePanel, index, index + 1);
+                } else if (placeToTheLeft != null && !placeToTheLeft.isVisible()) {
+                    swapThePlaces(placeToTheLeft, e, gamePanel, index, index - 1);
+                } else if (placeUp != null && !placeUp.isVisible()) {
+                    swapThePlaces(placeUp, e, gamePanel, index, index - 4);
+                } else if (placeDown != null && !placeDown.isVisible()) {
+                    swapThePlaces(placeDown, e, gamePanel, index, index + 4);
+                }
+            }
+
+            // kontrollera om spelaren vann
+            int numberButtonsInRightPlace = 0;
+            for (int i = 0; i < listOfButtons.size(); i++) {
+                if (gamePanel.getComponent(i) == listOfButtons.get(i)) {
+                    numberButtonsInRightPlace++;
+                }
+            }
+            if (numberButtonsInRightPlace == 16) {
+                JOptionPane.showMessageDialog(null, "Grattis, du vann!");
+            }
         }
     };
 
+    public void swapThePlaces(JButton whereToMove, ActionEvent event, JPanel gamePanel, int indexFrom, int indexTo) {
+        ((JButton) gamePanel.getComponent(indexTo)).removeAll();
+        gamePanel.add(((JButton) event.getSource()), indexTo);
+        gamePanel.add(whereToMove, indexFrom);
+        gamePanel.revalidate();
+    }
+
     public static void main(String[] args) {
-        Our_15_Spel game = new Our_15_Spel();
+        Our_15_Spel spel = new Our_15_Spel();
     }
 }
