@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
-public class Our_15_Spel extends JFrame {
+public class FemtonSpel extends JFrame {
 
     JPanel basePanel = new JPanel(new BorderLayout());
     JPanel gamePanel = new JPanel(new GridLayout(4, 4));
@@ -14,7 +14,7 @@ public class Our_15_Spel extends JFrame {
     List<JButton> listOfButtonsToShuffle;
 
 
-    public Our_15_Spel() {
+    public FemtonSpel() {
         add(basePanel);
         basePanel.add(gamePanel, BorderLayout.NORTH);
         basePanel.add(startButton, BorderLayout.SOUTH);
@@ -111,6 +111,6 @@ public class Our_15_Spel extends JFrame {
     }
 
     public static void main(String[] args) {
-        Our_15_Spel spel = new Our_15_Spel();
+        FemtonSpel spel = new FemtonSpel();
     }
 }
