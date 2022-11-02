@@ -12,12 +12,15 @@ public class FemtonSpel extends JFrame {
     JButton nyttSpel = new JButton("Nytt spel");
     List<JButton> listOfButtons = new LinkedList<>();
     List<JButton> listOfButtonsToShuffle;
-    JButton emptyButton = new JButton("");
+    JButton emptyButton = new JButton();
+    JTextArea championArea = new JTextArea(3, 30);
+    int numberOfClicks;
 
     public FemtonSpel() {
         add(panelBase);
         panelBase.add(nyttSpel, BorderLayout.NORTH);
-        panelBase.add(panelButtons, BorderLayout.SOUTH);
+        panelBase.add(panelButtons, BorderLayout.CENTER);
+        panelBase.add(championArea, BorderLayout.SOUTH);
 
         nyttSpel.addActionListener(listener);
 
@@ -51,6 +54,7 @@ public class FemtonSpel extends JFrame {
 
             // blanda knapparna i slumpmässig ordning när man trycker på start-knappen
             if (e.getSource() == nyttSpel) {
+                championArea.setText("");
                 Collections.shuffle(listOfButtonsToShuffle);
                 panelButtons.removeAll();
                 for (JButton button : listOfButtonsToShuffle) panelButtons.add(button);
@@ -97,6 +101,7 @@ public class FemtonSpel extends JFrame {
                 }
             }
             if (numberButtonsInRightPlace == 16) {
+                championArea.setText("Du löste spelet genom att flytta på " + numberOfClicks + " brickor.");
                 JOptionPane.showMessageDialog(null, "Grattis, du vann!");
             }
         }
@@ -108,6 +113,7 @@ public class FemtonSpel extends JFrame {
         gamePanel.add(((JButton) event.getSource()), indexTo);
         gamePanel.add(whereToMove, indexFrom);
         gamePanel.revalidate();
+        numberOfClicks++;
     }
 
     public static void main(String[] args) {
