@@ -68,9 +68,9 @@ public class FemtonSpel extends JFrame {
                 index = Arrays.asList(panelButtons.getComponents()).indexOf(((JButton) e.getSource()));
 
                 // tilldela index till möjliga tomma platser
-                if (index < panelButtons.getComponents().length - 1)
+                if (index < panelButtons.getComponents().length - 1 && index != 3 && index != 7 && index != 11)
                     placeToTheRight = (JButton) Arrays.asList(panelButtons.getComponents()).get(index + 1);
-                if (index > 0)
+                if (index > 0 && index != 4 && index != 8 && index != 12)
                     placeToTheLeft = (JButton) Arrays.asList(panelButtons.getComponents()).get(index - 1);
                 if (index >= 4)
                     placeUp = (JButton) Arrays.asList(panelButtons.getComponents()).get(index - 4);
@@ -78,14 +78,14 @@ public class FemtonSpel extends JFrame {
                     placeDown = (JButton) Arrays.asList(panelButtons.getComponents()).get(index + 4);
 
                 // kolla om "platsen är tom" och i så fall byta plats på 2 knappar
-                if (placeToTheRight != null && placeToTheRight==emptyButton) {
-                swapThePlaces(placeToTheRight, e, panelButtons, index, index + 1);
-                } else if (placeToTheLeft != null && placeToTheLeft==emptyButton) {
-                swapThePlaces(placeToTheLeft, e, panelButtons, index, index - 1);
-                } else if (placeUp != null && placeUp==emptyButton) {
-                swapThePlaces(placeUp, e, panelButtons, index, index - 4);
-                } else if (placeDown != null && placeDown==emptyButton) {
-                swapThePlaces(placeDown, e, panelButtons, index, index + 4);
+                if (placeToTheRight != null && placeToTheRight == emptyButton) {
+                    swapThePlaces(placeToTheRight, e, panelButtons, index, index + 1);
+                } else if (placeToTheLeft != null && placeToTheLeft == emptyButton) {
+                    swapThePlaces(placeToTheLeft, e, panelButtons, index, index - 1);
+                } else if (placeUp != null && placeUp == emptyButton) {
+                    swapThePlaces(placeUp, e, panelButtons, index, index - 4);
+                } else if (placeDown != null && placeDown == emptyButton) {
+                    swapThePlaces(placeDown, e, panelButtons, index, index + 4);
                 }
             }
 
