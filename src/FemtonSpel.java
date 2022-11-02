@@ -1,110 +1,116 @@
-
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
-public class FemtonSpel extends JFrame implements ActionListener {
+public class FemtonSpel extends JFrame {
 
-    //kommentar
-
-    JPanel p = new JPanel(new BorderLayout());
-    JPanel Buttons = new JPanel(new GridLayout(4, 4));
+    JPanel panelBase = new JPanel(new BorderLayout());
+    JPanel panelButtons = new JPanel(new GridLayout(4, 4));
+    JButton nyttSpel = new JButton("Nytt spel");
     List<JButton> listOfButtons = new LinkedList<>();
     List<JButton> listOfButtonsToShuffle;
-    JButton nyttSpel = new JButton("Nytt spel");
+    JButton emptyButton = new JButton("");
 
+    public FemtonSpel() {
+        add(panelBase);
+        panelBase.add(nyttSpel, BorderLayout.NORTH);
+        panelBase.add(panelButtons, BorderLayout.SOUTH);
 
-    JButton emptyButton = new JButton(" ");
+        nyttSpel.addActionListener(listener);
 
-    FemtonSpel() {
-        this.add(p);
-        p.add(nyttSpel, BorderLayout.NORTH);
-        p.add(Buttons, BorderLayout.CENTER);
-
-        nyttSpel.addActionListener(this);
-
+        // skapa 15 knappar
         for (int i = 1; i <= 15; i++) {
             JButton button = new JButton(String.valueOf(i));
+            button.setPreferredSize(new Dimension(50, 30));
+            button.setBackground(Color.pink);
+            button.addActionListener(listener);
             listOfButtons.add(button);
-            button.addActionListener(this);
         }
 
+        // lägga till den 16:e "tomma" knappen (utan lyssnaren)
         listOfButtons.add(emptyButton);
 
         for (JButton button : listOfButtons)
-            Buttons.add(button);
+            panelButtons.add(button);
 
         listOfButtonsToShuffle = new LinkedList<>(listOfButtons);
 
         pack();
+        setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    // skapa en lyssnare
+    ActionListener listener = new ActionListener() { // anonym klass
+        @Override
+        public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == nyttSpel) {
-            Collections.shuffle(listOfButtonsToShuffle);
-            Buttons.removeAll();
-            for (JButton button : listOfButtonsToShuffle) Buttons.add(button);
-            Buttons.revalidate();
-        }
+            // blanda knapparna i slumpmässig ordning när man trycker på start-knappen
+            if (e.getSource() == nyttSpel) {
+                Collections.shuffle(listOfButtonsToShuffle);
+                panelButtons.removeAll();
+                for (JButton button : listOfButtonsToShuffle) panelButtons.add(button);
+                panelButtons.revalidate();
+            }
 
-        int index = 0;
-        JButton placeToTheRight = null;
-        JButton placeToTheLeft = null;
-        JButton placeUp = null;
-        JButton placeDown = null;
+            int index;
+            JButton placeToTheRight = null;
+            JButton placeToTheLeft = null;
+            JButton placeUp = null;
+            JButton placeDown = null;
 
-        if (((JButton) e.getSource()).getParent() == Buttons) {
-            index = Arrays.asList(Buttons.getComponents()).indexOf(((JButton) e.getSource()));
+            // testa om det var en knapp som ligger på spelpanelen som användaren har tryckt på
+            if (((JButton) e.getSource()).getParent() == panelButtons) {
+                index = Arrays.asList(panelButtons.getComponents()).indexOf(((JButton) e.getSource()));
 
-            if (index < Buttons.getComponents().length - 1)
-                placeToTheRight = (JButton) Arrays.asList(Buttons.getComponents()).get(index + 1);
-            if (index > 0)
-                placeToTheLeft = (JButton) Arrays.asList(Buttons.getComponents()).get(index - 1);
-            if (index >= 4)
-                placeUp = (JButton) Arrays.asList(Buttons.getComponents()).get(index - 4);
-            if (index <= 11)
-                placeDown = (JButton) Arrays.asList(Buttons.getComponents()).get(index + 4);
+                // tilldela index till möjliga tomma platser
+                if (index < panelButtons.getComponents().length - 1)
+                    placeToTheRight = (JButton) Arrays.asList(panelButtons.getComponents()).get(index + 1);
+                if (index > 0)
+                    placeToTheLeft = (JButton) Arrays.asList(panelButtons.getComponents()).get(index - 1);
+                if (index >= 4)
+                    placeUp = (JButton) Arrays.asList(panelButtons.getComponents()).get(index - 4);
+                if (index <= 11)
+                    placeDown = (JButton) Arrays.asList(panelButtons.getComponents()).get(index + 4);
 
+                // kolla om "platsen är tom" och i så fall byta plats på 2 knappar
+                if (placeToTheRight != null && placeToTheRight==emptyButton) {
+                swapThePlaces(placeToTheRight, e, panelButtons, index, index + 1);
+                } else if (placeToTheLeft != null && placeToTheLeft==emptyButton) {
+                swapThePlaces(placeToTheLeft, e, panelButtons, index, index - 1);
+                } else if (placeUp != null && placeUp==emptyButton) {
+                swapThePlaces(placeUp, e, panelButtons, index, index - 4);
+                } else if (placeDown != null && placeDown==emptyButton) {
+                swapThePlaces(placeDown, e, panelButtons, index, index + 4);
+                }
+            }
 
-            if (placeToTheRight != null && placeToTheRight==emptyButton) {
-                swapThePlaces(placeToTheRight, e, Buttons, index, index + 1);
-            } else if (placeToTheLeft != null && placeToTheLeft==emptyButton) {
-                swapThePlaces(placeToTheLeft, e, Buttons, index, index - 1);
-            } else if (placeUp != null && placeUp==emptyButton) {
-                swapThePlaces(placeUp, e, Buttons, index, index - 4);
-            } else if (placeDown != null && placeDown==emptyButton) {
-                swapThePlaces(placeDown, e, Buttons, index, index + 4);
+            // kontrollera om spelaren vann
+            int numberButtonsInRightPlace = 0;
+            for (int i = 0; i < listOfButtons.size(); i++) {
+                if (panelButtons.getComponent(i) == listOfButtons.get(i)) {
+                    numberButtonsInRightPlace++;
+                }
+            }
+            if (numberButtonsInRightPlace == 16) {
+                JOptionPane.showMessageDialog(null, "Grattis, du vann!");
             }
         }
+    };
 
-        int numberButtonsInRightPlace = 0;
-        for (int i = 0; i < listOfButtons.size(); i++) {
-            if (Buttons.getComponent(i) == listOfButtons.get(i)) {
-                numberButtonsInRightPlace++;
-            }
-        }
-        if (numberButtonsInRightPlace == 16) {
-            JOptionPane.showMessageDialog(null, "Grattis, du vann!");
-
-        }
+    // metod som byter plats på 2 knappar
+    public void swapThePlaces(JButton whereToMove, ActionEvent event, JPanel gamePanel, int indexFrom, int indexTo) {
+        ((JButton) gamePanel.getComponent(indexTo)).removeAll();
+        gamePanel.add(((JButton) event.getSource()), indexTo);
+        gamePanel.add(whereToMove, indexFrom);
+        gamePanel.revalidate();
     }
 
-        public void swapThePlaces (JButton whereToMove, ActionEvent event, JPanel p, int indexFrom, int indexTo){
-            ((JButton) Buttons.getComponent(indexTo)).removeAll();
-            Buttons.add(((JButton) event.getSource()), indexTo);
-            Buttons.add(whereToMove, indexFrom);
-            Buttons.revalidate();
-        }
-
-        public static void main (String[]args){
-            FemtonSpel femtonSpel = new FemtonSpel();
-        }
+    public static void main(String[] args) {
+        FemtonSpel femtonSpel = new FemtonSpel();
     }
+}
