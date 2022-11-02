@@ -9,6 +9,8 @@ import java.util.List;
 
 public class FemtonSpel extends JFrame implements ActionListener {
 
+    //kommentar
+
     JPanel p = new JPanel(new BorderLayout());
     JPanel Buttons = new JPanel(new GridLayout(4, 4));
     List<JButton> listOfButtons = new LinkedList<>();
